@@ -3,6 +3,7 @@ var React = require('react');
 var Router = require('react-router');
 var AuthorForm = require('./authorForm');
 var AuthorApi = require('../../api/authorApi');
+var toastr = require('toastr');
 
 var manageAuthor = React.createClass({
   mixins: [ Router.Navigation ],
@@ -69,6 +70,7 @@ var manageAuthor = React.createClass({
     }
     AuthorApi.saveAuthor(this.state.author);
     this.setState({ authorFormDirty: false });
+    toastr.success('Author saved!');
     this.transitionTo('authors');
   },
 
