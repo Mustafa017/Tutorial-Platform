@@ -22,7 +22,7 @@ var authorStore = assign({}, EventEmitter.prototype, {
   },
   getAuthorById: function(id) {
     return _.find(_authors, {id: id});
-  }
+  },
 });
 
 Dispatcher.register(function(action) {
@@ -37,6 +37,13 @@ Dispatcher.register(function(action) {
       authorStore.emitChange();
       break;
   
+    case ActionTypes.UPDATE_AUTHOR:
+      var existingAuthor = _.find(_authors, {id: action.author.id});
+      var existingAuthorIndex = _.indexOf(_authors, existingAuthor);
+      _authors.splice(existingAuthorIndex, 1, action.author);
+      authorStore.emitChange();
+      break;
+      
     default:
       break;
   }
