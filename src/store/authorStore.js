@@ -23,6 +23,9 @@ var authorStore = assign({}, EventEmitter.prototype, {
   getAuthorById: function(id) {
     return _.find(_authors, {id: id});
   },
+  deleteAuthor: function(authorId) {
+    _.remove(_authors, {id: authorId});
+  }
 });
 
 Dispatcher.register(function(action) {
@@ -44,6 +47,11 @@ Dispatcher.register(function(action) {
       authorStore.emitChange();
       break;
       
+    case ActionTypes.DELETE_AUTHOR:
+      authorStore.deleteAuthor(action.id);
+      authorStore.emitChange();
+      break;
+
     default:
       break;
   }
