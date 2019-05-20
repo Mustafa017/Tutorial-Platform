@@ -2,7 +2,9 @@
 var React = require('react');
 var Router = require('react-router');
 var AuthorForm = require('./authorForm');
-var AuthorApi = require('../../api/authorApi');
+var AuthorStore = require('../../store/authorStore');
+var AuthorAction = require('../../actions/authorAction');
+var toastr = require('toastr');
 
 var manageAuthor = React.createClass({
   mixins: [ Router.Navigation ],
@@ -30,7 +32,7 @@ var manageAuthor = React.createClass({
   componentWillMount: function() {
     var authorId = this.props.params.id;
     if(authorId){
-      this.setState({ author: AuthorApi.getAuthorById(authorId) });
+      this.setState({ author: AuthorStore.getAuthorById(authorId) });
     }
   },
 
@@ -67,8 +69,15 @@ var manageAuthor = React.createClass({
     if(!this.authorFormValid()){
       return;
     }
-    AuthorApi.saveAuthor(this.state.author);
+
+    if(this.state.author.id){
+      AuthorAction.updateAuthor(this.state.author);
+    }else{
+      AuthorAction.createAuthor(this.state.author);
+    }
+    
     this.setState({ authorFormDirty: false });
+    toastr.success('Author saved!');
     this.transitionTo('authors');
   },
 
